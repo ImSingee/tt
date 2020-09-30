@@ -5,13 +5,13 @@ import (
 )
 
 // AssertEqual validates that val1 is equal to val2 and throws an error with line number
-func AssertEqual(t *testing.T, val1, val2 interface{}) {
-	equalSkip(t, 2, val1, val2)
+func AssertEqual(t *testing.T, expected, actual interface{}) {
+	equalSkip(t, 2, expected, actual)
 }
 
 // AssertNotEqual validates that val1 is not equal val2 and throws an error with line number
-func AssertNotEqual(t *testing.T, val1, val2 interface{}) {
-	notEqualSkip(t, 2, val1, val2)
+func AssertNotEqual(t *testing.T, unexpected, actual interface{}) {
+	notEqualSkip(t, 2, unexpected, actual)
 }
 
 // AssertMatchRegex validates that value matches the regex, either string or *regex
@@ -29,4 +29,12 @@ func AssertNotMatchRegex(t *testing.T, value string, regex interface{}) {
 // AssertPanicMatches validates that the panic output of running fn matches the supplied string
 func AssertPanicMatches(t *testing.T, fn func(), matches string) {
 	panicMatchesSkip(t, 2, fn, matches)
+}
+
+func AssertIsNil(t *testing.T, actual interface{}) {
+	equalSkip(t, 2, nil, actual)
+}
+
+func AssertIsNotNil(t *testing.T, actual interface{}) {
+	notEqualSkip(t, 2, nil, actual)
 }

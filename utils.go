@@ -124,11 +124,11 @@ func regexMatches(regex interface{}, value string) (*regexp.Regexp, bool, error)
 // equalSkip validates that val1 is equal to val2 and throws an error with line number
 // but the skip variable tells equalSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
-func equalSkip(t *testing.T, skip int, val1, val2 interface{}) {
+func equalSkip(t *testing.T, skip int, expected, actual interface{}) {
 
-	if !isEqual(val1, val2) {
+	if !isEqual(expected, actual) {
 		_, file, line, _ := runtime.Caller(skip)
-		fmt.Printf("%s:%d %v does not equal %v\n", path.Base(file), line, val1, val2)
+		fmt.Printf("%s:%d %v does not equal %v\n", path.Base(file), line, expected, actual)
 		t.FailNow()
 	}
 }
@@ -136,11 +136,11 @@ func equalSkip(t *testing.T, skip int, val1, val2 interface{}) {
 // notEqualSkip validates that val1 is not equal to val2 and throws an error with line number
 // but the skip variable tells notEqualSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
-func notEqualSkip(t *testing.T, skip int, val1, val2 interface{}) {
+func notEqualSkip(t *testing.T, skip int, unexpected, actual interface{}) {
 
-	if isEqual(val1, val2) {
+	if isEqual(unexpected, actual) {
 		_, file, line, _ := runtime.Caller(skip)
-		fmt.Printf("%s:%d %v should not be equal %v\n", path.Base(file), line, val1, val2)
+		fmt.Printf("%s:%d %v should not be equal %v\n", path.Base(file), line, unexpected, actual)
 		t.FailNow()
 	}
 }
