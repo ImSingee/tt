@@ -47,6 +47,6 @@ func AssertFalse(t *testing.T, actual bool) {
 	equalSkip(t, 2, false, actual)
 }
 
-func AssertInMap(t *testing.T, m map[interface{}]interface{}, key interface{}) {
+func AssertInMap(t *testing.T, m interface{}, key interface{}) {
 	inMapSkip(t, 2, m, key)
 }

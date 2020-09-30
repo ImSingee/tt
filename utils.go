@@ -169,11 +169,26 @@ func panicMatchesSkip(t *testing.T, skip int, fn func(), matches string) {
 	fn()
 }
 
-func inMapSkip(t *testing.T, skip int, m map[interface{}]interface{}, key interface{}) {
-	_, ok := m[key]
-	if !ok {
-		_, file, line, _ := runtime.Caller(skip)
-		fmt.Printf("%s:%d key %v does not in map %#+v\n", path.Base(file), line, key, m)
+func getError(layer int, reasonFormat string, v ...interface{}) string {
+	_, file, line, _ := runtime.Caller(layer + 1)
+
+	return fmt.Sprintf("%s:%d %s", file, line, fmt.Sprintf(reasonFormat, v...))
+}
+
+func inMapSkip(t *testing.T, layer int, m interface{}, key interface{}) {
+	v := reflect.ValueOf(m)
+
+	if v.Kind() != reflect.Map {
+		fmt.Println(getError(layer, "argument passed is not a map"))
 		t.FailNow()
 	}
+
+	for _, k := range v.MapKeys() {
+		if k.Interface() == key {
+			return
+		}
+	}
+
+	fmt.Println(getError(layer, "key %v does not in map %#+v", key, m))
+	t.FailNow()
 }
