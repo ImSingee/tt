@@ -38,3 +38,15 @@ func AssertIsNil(t *testing.T, actual interface{}) {
 func AssertIsNotNil(t *testing.T, actual interface{}) {
 	notEqualSkip(t, 2, nil, actual)
 }
+
+func AssertTrue(t *testing.T, actual bool) {
+	equalSkip(t, 2, true, actual)
+}
+
+func AssertFalse(t *testing.T, actual bool) {
+	equalSkip(t, 2, false, actual)
+}
+
+func AssertInMap(t *testing.T, m map[interface{}]interface{}, key interface{}) {
+	inMapSkip(t, 2, m, key)
+}
