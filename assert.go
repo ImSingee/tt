@@ -50,3 +50,11 @@ func AssertFalse(t *testing.T, actual bool) {
 func AssertInMap(t *testing.T, m interface{}, key interface{}) {
 	inMapSkip(t, 2, m, key)
 }
+
+func AssertIsError(t *testing.T, err error) {
+	notEqualSkip(t, 2, nil, err)
+}
+
+func AssertIsNotError(t *testing.T, err error) {
+	equalSkip(t, 2, nil, err)
+}
