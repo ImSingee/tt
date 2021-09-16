@@ -26,6 +26,11 @@ func AssertNotMatchRegex(t *testing.T, value string, regex interface{}) {
 	notMatchRegexSkip(t, 2, value, regex)
 }
 
+// AssertPanic validates that the function should panic
+func AssertPanic(t *testing.T, fn func()) {
+	panicSkip(t, 2, fn)
+}
+
 // AssertPanicMatches validates that the panic output of running fn matches the supplied string
 func AssertPanicMatches(t *testing.T, fn func(), matches string) {
 	panicMatchesSkip(t, 2, fn, matches)

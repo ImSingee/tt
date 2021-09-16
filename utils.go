@@ -72,7 +72,6 @@ CASE4:
 // but the skip variable tells notMatchRegexSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
 func notMatchRegexSkip(t *testing.T, skip int, value string, regex interface{}) {
-
 	if r, ok, err := regexMatches(regex, value); ok || err != nil {
 		_, file, line, _ := runtime.Caller(skip)
 
@@ -91,7 +90,6 @@ func notMatchRegexSkip(t *testing.T, skip int, value string, regex interface{}) 
 // but the skip variable tells matchRegexSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
 func matchRegexSkip(t *testing.T, skip int, value string, regex interface{}) {
-
 	if r, ok, err := regexMatches(regex, value); !ok {
 		_, file, line, _ := runtime.Caller(skip)
 
@@ -106,7 +104,6 @@ func matchRegexSkip(t *testing.T, skip int, value string, regex interface{}) {
 }
 
 func regexMatches(regex interface{}, value string) (*regexp.Regexp, bool, error) {
-
 	var err error
 
 	r, ok := regex.(*regexp.Regexp)
@@ -125,7 +122,6 @@ func regexMatches(regex interface{}, value string) (*regexp.Regexp, bool, error)
 // but the skip variable tells equalSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
 func equalSkip(t *testing.T, skip int, expected, actual interface{}) {
-
 	if !isEqual(expected, actual) {
 		_, file, line, _ := runtime.Caller(skip)
 		fmt.Printf("%s:%d %v does not equal %v\n", path.Base(file), line, expected, actual)
@@ -137,7 +133,6 @@ func equalSkip(t *testing.T, skip int, expected, actual interface{}) {
 // but the skip variable tells notEqualSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
 func notEqualSkip(t *testing.T, skip int, unexpected, actual interface{}) {
-
 	if isEqual(unexpected, actual) {
 		_, file, line, _ := runtime.Caller(skip)
 		fmt.Printf("%s:%d %v should not be equal %v\n", path.Base(file), line, unexpected, actual)
@@ -145,11 +140,23 @@ func notEqualSkip(t *testing.T, skip int, unexpected, actual interface{}) {
 	}
 }
 
+func panicSkip(t *testing.T, skip int, fn func()) {
+	_, file, line, _ := runtime.Caller(skip)
+
+	defer func() {
+		if r := recover(); r == nil {
+			fmt.Printf("%s:%d Panic Expected, none found", path.Base(file), line)
+			t.FailNow()
+		}
+	}()
+
+	fn()
+}
+
 // panicMatchesSkip validates that the panic output of running fn matches the supplied string
 // but the skip variable tells panicMatchesSkip how far back on the stack to report the error.
 // This is a building block to creating your own more complex validation functions.
 func panicMatchesSkip(t *testing.T, skip int, fn func(), matches string) {
-
 	_, file, line, _ := runtime.Caller(skip)
 
 	defer func() {
